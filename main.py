@@ -19,12 +19,11 @@ def developer():
 		registeredDevelopers = dict()
 		#Current error:
 		#Does not actually make registered developers a dict with the appropriate usernames
-		print(registeredDevelopers)
 
 		username = input('\nWhat is your username?\n')
 		password = input('\nWhat is your password?\n')
 
-		print(username in registeredDevelopers)
+		#print(username in registeredDevelopers)
 
 		#Checks if username and password is correct
 		if username in registeredDevelopers:
