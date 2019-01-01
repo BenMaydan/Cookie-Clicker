@@ -1,46 +1,107 @@
 import menu
+import pickle
+#import config
 
-def clicker():
-	pass
+
+def clicker(currentCookies):
+
+	cookies = 0
+	exit = False
+
+	print("\nAt any time, press '1' to go back to the main menu. To click cookies type in 'c' and then press enter\n")
+
+	while not exit:
+		
+		letterClicked = input()
+		
+		if letterClicked == 'c':
+			currentCookies += 1
+			print('# of cookies is ' + str(currentCookies))
+			saveCookies(currentCookies)
+
+		elif letterClicked == '1':
+			saveCookies(currentCookies)
+			menu.mainMenu()
+
+		elif letterClicked == '#':
+			print(currentCookies)
+
+		else:
+			print('Unrecognized input!')
 
 
 def developer():
 
-	exit = False
+	pickle_in = open("devs.pickle","rb")
+	registeredDevelopers = pickle.load(pickle_in)
 
-	while not exit:
-		registeredDevelopers = open('registeredDevelopers.txt', 'w')
-		registeredDevelopers.write("{'Ben':'root'}")
-		registeredDevelopers.close()
+	username = input('\nWhat is your username?\n')
+	password = input('\nWhat is your password?\n')
 
-		
-		registeredDevelopers = open('registeredDevelopers.txt', 'r')
-		registeredDevelopers.read()
-		registeredDevelopers = dict()
-		#Current error:
-		#Does not actually make registered developers a dict with the appropriate usernames
+	#Checks if username and password is correct
+	if username in registeredDevelopers:
 
-		username = input('\nWhat is your username?\n')
-		password = input('\nWhat is your password?\n')
-
-		#print(username in registeredDevelopers)
-
-		#Checks if username and password is correct
-		if username in registeredDevelopers:
-
-			if registeredDevelopers[username] == password:
-				print('Success! You are now in the developer menu!')
-				print('This is a test')
-				exit = True
-				print('This is a test')
-				menu.developer()
-			else:
-				print('Error: Wrong username or password')
-				exit = True
-				print('This is a test')
-				menu.mainMenu()
-
+		if registeredDevelopers[username] == password:
+			print('\nSuccess! You are now in the developer menu!')
+			loggedIn = True
+			menu.developerMenu()
 		else:
 			print('Error: Wrong username or password')
-			exit = True
 			menu.mainMenu()
+
+	else:
+		print('Error: Wrong username or password')
+		menu.mainMenu()
+
+
+def loadSaveData():
+	
+	try:
+		pickle_out = open("cookiesData.pickle","rb")
+		cookieDict = pickle.load(pickle_out)
+		totalCookies = cookieDict['currentUser']
+		pickle_out.close()
+
+		return totalCookies
+	
+	except EOFError:
+		print("I'm afraid your cookie data has been corrupted. We know this won't compensate, but we have given you 1,500 cookies to make up for it.")
+		corruptedData()
+
+
+
+def saveCookies(cookiesClicked):
+
+	clickedCookies = {}
+	clickedCookies['currentUser'] = cookiesClicked
+
+	pickle_out = open("cookiesData.pickle","wb")
+	pickle.dump(clickedCookies, pickle_out)
+	pickle_out.close()
+
+
+def manuallyChangeCookies():
+
+	changeTo = input('\nWhat would you like to change the cookies to?\n')
+	saveCookies(changeTo)
+	print('Successfully changed number of cookies to ' + str(changeTo))
+
+
+def corruptedData():
+
+	cookieDict = {}
+	cookieDict['currentUser'] = 1500
+
+	pickle_out = open("cookiesData.pickle","wb")
+	pickle.dump(cookieDict, pickle_out)
+	pickle_out.close()
+
+
+def tempPicklingDev():
+
+	registeredDevelopers = {'Ben':'default', 'Lia':'default'}
+
+	pickle_out = open("devs.pickle","wb")
+	pickle.dump(registeredDevelopers, pickle_out)
+	pickle_out.close()
+
