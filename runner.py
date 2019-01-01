@@ -1,6 +1,6 @@
 import menu
 import main
-import config
 
-#config.changeLogInStatus(False)
+#main.tempPicklingCookies()
+#main.tempPicklingDev()
 menu.mainMenu()

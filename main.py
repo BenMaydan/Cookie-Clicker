@@ -83,7 +83,7 @@ def saveCookies(cookiesClicked):
 def manuallyChangeCookies():
 
 	changeTo = input('\nWhat would you like to change the cookies to?\n')
-	saveCookies(changeTo)
+	saveCookies(int(changeTo))
 	print('Successfully changed number of cookies to ' + str(changeTo))
 
 
@@ -99,9 +99,19 @@ def corruptedData():
 
 def tempPicklingDev():
 
-	registeredDevelopers = {'Ben':'default', 'Lia':'default'}
+	registeredDevelopers = {'Ben':'default'}
 
 	pickle_out = open("devs.pickle","wb")
 	pickle.dump(registeredDevelopers, pickle_out)
 	pickle_out.close()
+
+def tempPicklingCookies():
+
+	cookieDict = {'currentUser':0}
+
+	pickle_out = open("cookiesData.pickle","wb")
+	pickle.dump(cookieDict, pickle_out)
+	pickle_out.close()
+
+
 
