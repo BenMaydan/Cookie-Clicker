@@ -6,9 +6,10 @@ def mainMenu():
 
 	while not exit:
 		print('\n1. Clicker')
-		print('2. Developer login')
-		print('3. Change username or password')
-		print('4. Exit')
+		print('2. Reset cookies')
+		print('3. Developer login')
+		print('4. Change username or password')
+		print('5. Exit')
 		choice = input('Please choose one of the above:\n')
 
 		if choice == '1':
@@ -16,15 +17,18 @@ def mainMenu():
 			main.clicker(cookies)
 
 		elif choice == '2':
-			main.developer()
+			main.resetCookies()
 
 		elif choice == '3':
+			main.developer()
+
+		elif choice == '4':
 			print('\nNot available just yet')
 			#password = input('\nWhat is the password to change developer account info?\n')
 			#main.checkAdminPassword()
 			#main.forgotUsernameOrPassword()
 
-		elif choice == '4':
+		elif choice == '5':
 			exit = True
 
 		else:

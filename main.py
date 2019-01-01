@@ -82,9 +82,25 @@ def saveCookies(cookiesClicked):
 
 def manuallyChangeCookies():
 
-	changeTo = input('\nWhat would you like to change the cookies to?\n')
-	saveCookies(int(changeTo))
-	print('Successfully changed number of cookies to ' + str(changeTo))
+	exit = False
+
+	while not exit:
+		changeTo = input('\nWhat would you like to change the cookies to?\n')
+
+		try:
+			changeTo = int(changeTo)
+			
+			if changeTo >= 0:
+				saveCookies(int(changeTo))
+				print('\nSuccessfully changed number of cookies to ' + str(changeTo) + '\n')
+				menu.developerMenu()
+
+			else:
+				print("\nYou entered a negative number!")
+		
+
+		except:
+			print('\nYou did not enter a number!')
 
 
 def corruptedData():
@@ -95,6 +111,26 @@ def corruptedData():
 	pickle_out = open("cookiesData.pickle","wb")
 	pickle.dump(cookieDict, pickle_out)
 	pickle_out.close()
+
+
+def resetCookies():
+	
+	choice = input('\nAre you sure you would like to reset your cookies? y/n\n')
+
+	exit = False
+	while not exit:
+	
+		if choice == 'y':
+			exit = True
+			saveCookies(0)
+			menu.mainMenu()
+
+		elif choice == 'n':
+			exit = True
+			menu.mainMenu()
+
+		else:
+			print('Unrecognized input')
 
 
 def tempPicklingDev():
