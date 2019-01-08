@@ -20,7 +20,8 @@ def mainMenu():
 
 		if choice == '1':
 			cookies = save.loadSaveData()
-			cookie.clicker(cookies)
+			doubleUpgrade = save.file('doubleUpgrade.pickle', 'rb')
+			cookie.clicker(cookies, doubleUpgrade['cookiesPerClick'])
 
 		elif choice == '2':
 			upgradesMenu()
@@ -51,6 +52,7 @@ def upgradesMenu():
 	"""
 	This is the menu to buy upgrades
 	"""
+	doubleUpgrade = save.file('doubleUpgrade.pickle', 'rb')
 
 	exit = False
 	while not exit:
@@ -65,7 +67,40 @@ def upgradesMenu():
 
 		
 		if choiceOfUpgrade == '1':
-			print('\nNot available yet!')
+			print('\nThe cost for this upgrade is ' + str(doubleUpgrade['cost']))
+			
+			exit3 = False
+
+			while not exit3:
+				doubleUpgradeChoice = input('Would you like to go ahead with buying this upgrade? yes/no\n')
+
+				if doubleUpgradeChoice == 'yes':
+					#Checks how much cookies the current user has
+
+					cookiesDict = save.file('cookiesData.pickle', 'rb')
+					userCookies = cookiesDict['currentUser']
+
+					#Checks if user has enough cookies to purchase the upgrade
+					#Subtracts the cost of the upgrade from it
+					#Only if their cookies is higher than or equal to the cost of the upgrade
+					if cookiesDict['currentUser'] >= doubleUpgrade['cost']:
+						exit3 = True
+						save.file('cookiesData.pickle', 'wb', {'currentUser':userCookies - doubleUpgrade['cost']})
+						print('Upgrade successful!')
+						
+						cookiesDict = save.file('cookiesData.pickle', 'rb')
+						userCookies = cookiesDict['currentUser']
+						print('\nYou have ' + str(userCookies) + ' left!')
+					else:
+						exit3 = True
+						print('You do not have enough cookies to purchase this upgrade!')
+						upgradesMenu()
+
+				elif doubleUpgradeChoice == 'no':
+					exit3 = True
+					upgradesMenu()
+				else:
+					print('Unrecognized input!')
 
 		
 		elif choiceOfUpgrade == '2':
@@ -107,7 +142,7 @@ def upgradesMenu():
 			print('\nNot available yet!')
 
 
-		elif choice == '6':
+		elif choiceOfUpgrade == '6':
 			exit = True
 
 		
@@ -126,7 +161,6 @@ def developerMenu():
 		print('1. Change number of cookies for current user')
 		print('2. Change upgrades for current user')
 		print('3. Back to main menu')
-		print('4. Exit')
 		choice = input('Please choose one of the above:\n')
 
 		if choice == '1':
@@ -138,9 +172,6 @@ def developerMenu():
 		elif choice == '3':
 			exit = True
 			mainMenu()
-
-		elif choice == '4':
-			exit = True
 
 		else:
 			print('Unrecognized input!')

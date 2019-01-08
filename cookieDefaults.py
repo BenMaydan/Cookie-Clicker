@@ -24,12 +24,12 @@ def picklingCookies(mode):
 	pickle_out.close()
 
 
-def picklingDoubleUpgrade(mode, upgrade = 1):
+def picklingDoubleUpgrade(mode, cookiesPerClick = 1):
 	"""
 	Defaults for which upgrade the user is on for the double upgrade
 	"""
 
-	doubleUpgrade = {'currentClicks':upgrade}
+	doubleUpgrade = {'cookiesPerClick':cookiesPerClick}
 
 	doubleUpgradeFile = open("doubleUpgrade.pickle", mode)
 	pickle.dump(doubleUpgrade, doubleUpgradeFile)

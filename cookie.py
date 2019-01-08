@@ -4,7 +4,7 @@ import save
 #import config
 
 
-def clicker(currentCookies):
+def clicker(currentCookies, cookiesPerClick = 1):
 	"""
 	The place the user goes to, to click cookies
 	"""
@@ -20,7 +20,7 @@ def clicker(currentCookies):
 		letterClicked = input()
 		
 		if letterClicked == 'c':
-			currentCookies += 1
+			currentCookies += cookiesPerClick
 			print('# of cookies is ' + str(currentCookies) + '\n')
 			save.saveCookies(currentCookies)
 
