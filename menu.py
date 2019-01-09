@@ -12,22 +12,36 @@ def mainMenu():
 	while not exit:
 		print('\n1. Clicker')
 		print('2. Upgrades')
-		print('3. Reset cookies')
+		print('3. Reset')
 		print('4. Developer login')
 		print('5. Change username or password')
 		print('6. Exit')
 		choice = input('Please choose one of the above:\n')
 
 		if choice == '1':
-			cookies = save.loadSaveData()
-			doubleUpgrade = save.file('doubleUpgrade.pickle', 'rb')
-			cookie.clicker(cookies, doubleUpgrade['cookiesPerClick'])
+			cookie.clicker()
 
 		elif choice == '2':
 			upgradesMenu()
 
+
 		elif choice == '3':
-			cookie.resetCookies()
+
+			exit2 = False
+			while not exit2:
+
+				print('\n\n1. Reset Cookies')
+				resetChoice = input('2. Reset Upgrades\n')
+				
+				if resetChoice == '1':
+					exit2 = True
+					cookie.resetCookies()
+				if resetChoice == '2':
+					exit2 == True
+					cookie.resetUpgrades()
+				else:
+					print('Unrecognized input!')
+
 
 		elif choice == '4':
 			developer.checkLogin()
@@ -39,7 +53,7 @@ def mainMenu():
 			#cookie.forgotUsernameOrPassword()
 
 		elif choice == 'more':
-			save.saveCookies(100000)
+			save.file('cookiesData.pickle', 'wb', {'currentUser':10000000000})
 
 		elif choice == '6':
 			exit = True
@@ -52,7 +66,6 @@ def upgradesMenu():
 	"""
 	This is the menu to buy upgrades
 	"""
-	doubleUpgrade = save.file('doubleUpgrade.pickle', 'rb')
 
 	exit = False
 	while not exit:
@@ -67,38 +80,70 @@ def upgradesMenu():
 
 		
 		if choiceOfUpgrade == '1':
-			print('\nThe cost for this upgrade is ' + str(doubleUpgrade['cost']))
+			#Checks how much cookies the user has
+			cookiesDict = save.file('cookiesData.pickle', 'rb')
+			doubleUpgradeDict = save.file('doubleUpgrade.pickle', 'rb')
+			print(doubleUpgradeDict)
+			
+			print('\nThe cost for this upgrade is ' + str(doubleUpgradeDict['cost']))
+			
 			
 			exit3 = False
-
 			while not exit3:
+				
 				doubleUpgradeChoice = input('Would you like to go ahead with buying this upgrade? yes/no\n')
 
 				if doubleUpgradeChoice == 'yes':
-					#Checks how much cookies the current user has
-
-					cookiesDict = save.file('cookiesData.pickle', 'rb')
 					userCookies = cookiesDict['currentUser']
 
 					#Checks if user has enough cookies to purchase the upgrade
 					#Subtracts the cost of the upgrade from it
 					#Only if their cookies is higher than or equal to the cost of the upgrade
-					if cookiesDict['currentUser'] >= doubleUpgrade['cost']:
+					print(cookiesDict['currentUser'] >= doubleUpgradeDict['cost'])
+					if cookiesDict['currentUser'] >= doubleUpgradeDict['cost']:
 						exit3 = True
-						save.file('cookiesData.pickle', 'wb', {'currentUser':userCookies - doubleUpgrade['cost']})
+
+						#The block of code below subtracts the cost of the upgrade from the user's total cookies
+						newAmountOfCookies = userCookies - doubleUpgradeDict['cost']
+						newDictToSave = {'currentUser':newAmountOfCookies}
+						save.file('cookiesData.pickle', 'wb', newDictToSave)
 						print('Upgrade successful!')
+
+						#Checks current doubleUpgrade file data
+						cookiesPerClick = doubleUpgradeDict['cookiesPerClick']
+						cost = doubleUpgradeDict['cost']
+
+						#This should actually upgrade the data for the cookies per click
+						newDoubleUpgradeDict = doubleUpgradeDict
+						newDoubleUpgradeDict['cookiesPerClick'] = cookiesPerClick * 2
+						newDoubleUpgradeDict['cost'] = cost * 3
+						save.file('doubleUpgrade.pickle', 'wb', newDoubleUpgradeDict)
 						
+						#Checks how many cookies the user has left
 						cookiesDict = save.file('cookiesData.pickle', 'rb')
 						userCookies = cookiesDict['currentUser']
-						print('\nYou have ' + str(userCookies) + ' left!')
+						print('\nYou have ' + str(userCookies) + ' cookies left!')
 					else:
 						exit3 = True
 						print('You do not have enough cookies to purchase this upgrade!')
-						upgradesMenu()
+						
+						#Checks to make sure recursive calling has not exceeded the limit
+						try:
+							upgradesMenu()
+						except:
+							exit3 = True
+							exit = True
+							print('An Error Occurred!')
+							mainMenu()
 
 				elif doubleUpgradeChoice == 'no':
 					exit3 = True
-					upgradesMenu()
+					#Checks to make sure recursive calling has not exceeded the limit
+					try:
+						upgradesMenu()
+					except:
+						print('An Error Occurred!')
+						mainMenu
 				else:
 					print('Unrecognized input!')
 

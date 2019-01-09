@@ -14,11 +14,10 @@ def manuallyChangeCookies():
 
 		try:
 			changeToInteger = int(changeToString)
-		
+	
 			if changeToInteger >= 0:
-				save.saveCookies(changeToInteger)
+				save.file('cookiesData.pickle', 'wb', {'currentUser':changeToInteger})
 				print('\nSuccessfully changed number of cookies to ' + changeToString + '\n')
-				menu.developerMenu()
 
 			else:
 				print("\nYou entered a negative number!")
@@ -26,6 +25,9 @@ def manuallyChangeCookies():
 
 		except:
 			print('\nYou did not enter a number!')
+
+		finally:
+			menu.developerMenu()
 
 
 def checkLogin():

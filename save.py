@@ -2,19 +2,6 @@ import pickle
 import cookie
 
 
-def saveCookies(cookiesClicked):
-	"""
-	Saves the number of cookies the user has clicked this session in a file
-	"""
-
-	clickedCookies = {}
-	clickedCookies['currentUser'] = cookiesClicked
-
-	pickle_out = open("cookiesData.pickle","wb")
-	pickle.dump(clickedCookies, pickle_out)
-	pickle_out.close()
-
-
 def loadSaveData():
 	"""
 	When the user opens the program, this function will proceed to load in how many cookies the user has
