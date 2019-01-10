@@ -30,6 +30,9 @@ def clicker():
 			save.file('cookiesData.pickle', 'wb', {'currentUser':currentCookies})
 			menu.mainMenu()
 
+		elif letterClicked == 'k':
+			print('Cookies per click is', cookiesPerClick, '\n')
+
 		elif letterClicked == '#':
 			print(currentCookies)
 
@@ -51,11 +54,9 @@ def resetCookies():
 			exit = True
 			save.file('cookiesData.pickle', 'wb', {'currentUser':0})
 			print('\nSuccessfully reset cookies!')
-			menu.mainMenu()
 
-		if choice == 'n':
+		elif choice == 'n':
 			exit = True
-			menu.mainMenu()
 
 		else:
 			print('Unrecognized input')

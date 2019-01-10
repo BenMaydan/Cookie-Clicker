@@ -1,4 +1,5 @@
 import cookie
+import upgradeLogic
 import save
 import developer
 
@@ -31,14 +32,20 @@ def mainMenu():
 			while not exit2:
 
 				print('\n\n1. Reset Cookies')
-				resetChoice = input('2. Reset Upgrades\n')
+				print('2. Reset Upgrades')
+				print('3. Exit')
+				resetChoice = input('')
 				
 				if resetChoice == '1':
-					exit2 = True
-					cookie.resetCookies()
-				if resetChoice == '2':
-					exit2 == True
+					save.file('cookiesData.pickle', 'wb', {'currentUser':0})
+					print('\nSuccessfully reset cookies!')
+
+				elif resetChoice == '2':
 					cookie.resetUpgrades()
+
+				elif resetChoice == '3':
+					exit2 = True
+
 				else:
 					print('Unrecognized input!')
 
@@ -80,17 +87,14 @@ def upgradesMenu():
 
 		
 		if choiceOfUpgrade == '1':
-			#Checks how much cookies the user has
+
 			cookiesDict = save.file('cookiesData.pickle', 'rb')
 			doubleUpgradeDict = save.file('doubleUpgrade.pickle', 'rb')
-			print(doubleUpgradeDict)
-			
-			print('\nThe cost for this upgrade is ' + str(doubleUpgradeDict['cost']))
-			
 			
 			exit3 = False
 			while not exit3:
 				
+				print('\nThe cost for this upgrade is ' + str(doubleUpgradeDict['cost']))
 				doubleUpgradeChoice = input('Would you like to go ahead with buying this upgrade? yes/no\n')
 
 				if doubleUpgradeChoice == 'yes':
@@ -99,30 +103,10 @@ def upgradesMenu():
 					#Checks if user has enough cookies to purchase the upgrade
 					#Subtracts the cost of the upgrade from it
 					#Only if their cookies is higher than or equal to the cost of the upgrade
-					print(cookiesDict['currentUser'] >= doubleUpgradeDict['cost'])
 					if cookiesDict['currentUser'] >= doubleUpgradeDict['cost']:
 						exit3 = True
+						upgradeLogic.doubleUpgrade()
 
-						#The block of code below subtracts the cost of the upgrade from the user's total cookies
-						newAmountOfCookies = userCookies - doubleUpgradeDict['cost']
-						newDictToSave = {'currentUser':newAmountOfCookies}
-						save.file('cookiesData.pickle', 'wb', newDictToSave)
-						print('Upgrade successful!')
-
-						#Checks current doubleUpgrade file data
-						cookiesPerClick = doubleUpgradeDict['cookiesPerClick']
-						cost = doubleUpgradeDict['cost']
-
-						#This should actually upgrade the data for the cookies per click
-						newDoubleUpgradeDict = doubleUpgradeDict
-						newDoubleUpgradeDict['cookiesPerClick'] = cookiesPerClick * 2
-						newDoubleUpgradeDict['cost'] = cost * 3
-						save.file('doubleUpgrade.pickle', 'wb', newDoubleUpgradeDict)
-						
-						#Checks how many cookies the user has left
-						cookiesDict = save.file('cookiesData.pickle', 'rb')
-						userCookies = cookiesDict['currentUser']
-						print('\nYou have ' + str(userCookies) + ' cookies left!')
 					else:
 						exit3 = True
 						print('You do not have enough cookies to purchase this upgrade!')
