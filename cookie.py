@@ -1,7 +1,6 @@
 import menu
 import pickle
 import save
-#import config
 
 
 def clicker():
@@ -63,7 +62,7 @@ def resetCookies():
 
 
 def resetUpgrades():
-	pass
+	save.file('doubleUpgrade.pickle', 'wb', {'cookiesPerClick':1, 'cost':500})
 
 
 def numberOfCookies():
