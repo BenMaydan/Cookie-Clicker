@@ -8,5 +8,6 @@ import save
 #doubleUpgradeDict = save.file('doubleUpgrade.pickle', 'rb')
 #print(doubleUpgradeDict)
 
-
-menu.mainMenu()
+exit = False
+while not exit:
+	exit = menu.mainMenu()
