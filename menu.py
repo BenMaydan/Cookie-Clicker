@@ -20,6 +20,7 @@ def mainMenu():
 	choice = input('Please choose one of the above:\n')
 
 	if choice == '1':
+		print("\nTo click cookies type in 'c' and then press enter. At any time, press '1' to go back to the main menu.\n")
 		cookie.clicker()
 
 	elif choice == '2':
@@ -65,7 +66,7 @@ def upgradesMenu():
 		menuChoices.doubleUpgrade()
 	
 	elif choiceOfUpgrade == '2':
-		print('\nNot available yet!')
+		menuChoices.goldenCookie()
 
 	elif choiceOfUpgrade == '3':
 		menuChoices.autoClickerUpgrade()

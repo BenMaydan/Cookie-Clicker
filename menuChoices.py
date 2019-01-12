@@ -38,7 +38,7 @@ def doubleUpgrade():
 	doubleUpgradeDict = save.file('doubleUpgrade.pickle', 'rb')
 		
 
-	print('\nThe cost for this upgrade is ' + str(doubleUpgradeDict['cost']))
+	print('\nThe cost for this upgrade is ' + str(doubleUpgradeDict['costDoubleUpgrade']))
 	doubleUpgradeChoice = input('Would you like to go ahead with buying this upgrade? yes/no\n')
 
 	if doubleUpgradeChoice == 'yes':
@@ -47,7 +47,7 @@ def doubleUpgrade():
 		#Checks if user has enough cookies to purchase the upgrade
 		#Subtracts the cost of the upgrade from it
 		#Only if their cookies is higher than or equal to the cost of the upgrade
-		if cookiesDict['currentUser'] >= doubleUpgradeDict['cost']:
+		if cookiesDict['currentUser'] >= doubleUpgradeDict['costDoubleUpgrade']:
 			#This upgrade logic should read and write everything to the file
 			#But only if the user has enough money and they want to buy the upgrade
 			upgradeLogic.doubleUpgrade()
@@ -61,6 +61,10 @@ def doubleUpgrade():
 		menu.upgradesMenu()
 	else:
 		print('Unrecognized input!')
+
+
+def goldenCookie():
+	pass
 
 
 def autoClickerUpgrade():

@@ -1,43 +1,40 @@
 import menu
 import pickle
 import save
+import upgradeLogic
 
 
 def clicker():
 	"""
 	The place the user goes to, to click cookies
 	"""
-	#The parameter currentCookies is the number of cookies the user has in the 'vault'
 	doubleUpgrade = save.file('doubleUpgrade.pickle', 'rb')
 	cookiesPerClick = doubleUpgrade['cookiesPerClick']
+	#The variable currentCookies is the number of cookies the user has in the 'vault'
+	currentCookies = numberOfCookies()
 
-	print("\nAt any time, press '1' to go back to the main menu. To click cookies type in 'c' and then press enter\n")
+	letterClicked = input()
+	letterClicked = letterClicked.lower()
 	
-	cookieExit = False
+	if letterClicked == 'c':
+		currentCookies += cookiesPerClick
+		print('# of cookies is ' + str(currentCookies) + '\n')
+		goldenCookieTrueOrFalse = upgradeLogic.checkGoldenCookie()
+		upgradeLogic.goldenCookieTrueOrFalse(goldenCookieTrueOrFalse, currentCookies)
 
-	while not cookieExit:
-		
-		currentCookies = numberOfCookies()
-		letterClicked = input()
-		
-		if letterClicked == 'c':
-			currentCookies += cookiesPerClick
-			print('# of cookies is ' + str(currentCookies) + '\n')
-			save.file('cookiesData.pickle', 'wb', {'currentUser': currentCookies})
+	elif letterClicked == '1':
+		save.file('cookiesData.pickle', 'wb', {'currentUser':currentCookies})
+		menu.mainMenu()
 
-		elif letterClicked == '1':
-			cookieExit = True
-			save.file('cookiesData.pickle', 'wb', {'currentUser':currentCookies})
-			menu.mainMenu()
+	elif letterClicked == 'k':
+		print('Cookies per click is', cookiesPerClick, '\n')
 
-		elif letterClicked == 'k':
-			print('Cookies per click is', cookiesPerClick, '\n')
+	elif letterClicked == '#':
+		print(currentCookies)
 
-		elif letterClicked == '#':
-			print(currentCookies)
-
-		else:
-			print('Unrecognized input!')
+	else:
+		print('Unrecognized input!')
+		clicker()
 
 
 def resetCookies():
@@ -63,7 +60,8 @@ def resetCookies():
 
 
 def resetUpgrades():
-	save.file('doubleUpgrade.pickle', 'wb', {'cookiesPerClick':1, 'cost':500})
+	save.file('doubleUpgrade.pickle', 'wb', {'cookiesPerClick':1, 'costDoubleUpgrade':500})
+	save.file('goldenCookie.pickle', 'wb', {'goldenCookieChance':1, 'costGoldenCookie':1000})
 
 
 def numberOfCookies():
