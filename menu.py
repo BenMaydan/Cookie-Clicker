@@ -63,10 +63,10 @@ def upgradesMenu():
 
 
 	if choiceOfUpgrade == '1':
-		menuChoices.doubleUpgrade()
+		menuChoices.upgradeCheckMoney('doubleUpgrade')
 	
 	elif choiceOfUpgrade == '2':
-		menuChoices.goldenCookie()
+		menuChoices.upgradeCheckMoney('goldenCookie')
 
 	elif choiceOfUpgrade == '3':
 		menuChoices.autoClickerUpgrade()

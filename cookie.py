@@ -62,6 +62,7 @@ def resetCookies():
 def resetUpgrades():
 	save.file('doubleUpgrade.pickle', 'wb', {'cookiesPerClick':1, 'costDoubleUpgrade':500})
 	save.file('goldenCookie.pickle', 'wb', {'goldenCookieChance':1, 'costGoldenCookie':1000})
+	print('\nUpgrades successfully reset!')
 
 
 def numberOfCookies():

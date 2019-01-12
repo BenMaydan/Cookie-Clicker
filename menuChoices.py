@@ -29,42 +29,51 @@ def mainMenuReset():
 		mainMenuReset()
 
 
-def doubleUpgrade():
+def upgradeCheckMoney(upgrade):
 	"""
 	This is the logic for the double upgrade
 	"""
 
 	cookiesDict = save.file('cookiesData.pickle', 'rb')
-	doubleUpgradeDict = save.file('doubleUpgrade.pickle', 'rb')
+	upgradeDict = save.file(upgrade + '.pickle', 'rb')
+	print(upgradeDict)
+	upgradeToCommand = {'doubleUpgrade':upgradeLogic.doubleUpgrade, 'goldenCookie':upgradeLogic.goldenCookieUpgrade}
 		
 
-	print('\nThe cost for this upgrade is ' + str(doubleUpgradeDict['costDoubleUpgrade']))
-	doubleUpgradeChoice = input('Would you like to go ahead with buying this upgrade? yes/no\n')
+	print('\nThe cost for this upgrade is ' + str(upgradeDict['cost']))
+	upgradeChoice = input('Would you like to go ahead with buying this upgrade? yes/no\n')
 
-	if doubleUpgradeChoice == 'yes':
+	if upgradeChoice == 'yes':
 		userCookies = cookiesDict['currentUser']
 
 		#Checks if user has enough cookies to purchase the upgrade
 		#Subtracts the cost of the upgrade from it
 		#Only if their cookies is higher than or equal to the cost of the upgrade
-		if cookiesDict['currentUser'] >= doubleUpgradeDict['costDoubleUpgrade']:
+		if cookiesDict['currentUser'] >= upgradeDict['cost']:
 			#This upgrade logic should read and write everything to the file
 			#But only if the user has enough money and they want to buy the upgrade
-			upgradeLogic.doubleUpgrade()
+			upgradeToCommand[upgrade]()
+			menu.upgradesMenu()
 
 		else:
 			print('You do not have enough cookies to purchase this upgrade!')
 			menu.upgradesMenu()
 
-	elif doubleUpgradeChoice == 'no':
-		exit3 = True
+	elif upgradeChoice == 'no':
 		menu.upgradesMenu()
+	
 	else:
 		print('Unrecognized input!')
 
 
 def goldenCookie():
-	pass
+	"""
+	This are the checkers for the double upgrade
+	"""
+	cookiesDict = save.file('cookiesData.pickle', 'rb')
+	goldenCookieDict = save.file('goldenCookie.pickle', 'rb')
+
+	print('The cost for the golden cookie')
 
 
 def autoClickerUpgrade():

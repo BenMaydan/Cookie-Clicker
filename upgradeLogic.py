@@ -12,8 +12,6 @@ def doubleUpgrade():
 	doubleUpgradeDict = save.file('doubleUpgrade.pickle', 'rb')
 	userCookies = cookiesDict['currentUser']
 
-	print('\nThe cost for this upgrade is ' + str(doubleUpgradeDict['costDoubleUpgrade']))
-
 
 	#The block of code below subtracts the cost of the upgrade from the user's total cookies
 	newAmountOfCookies = userCookies - doubleUpgradeDict['cost']
@@ -24,13 +22,13 @@ def doubleUpgrade():
 
 	#Checks current doubleUpgrade file data
 	cookiesPerClick = doubleUpgradeDict['cookiesPerClick']
-	cost = doubleUpgradeDict['costDoubleUpgrade']
+	cost = doubleUpgradeDict['cost']
 
 
 	#This should actually upgrade the data for the cookies per click
 	newDoubleUpgradeDict = doubleUpgradeDict
 	newDoubleUpgradeDict['cookiesPerClick'] = cookiesPerClick * 2
-	newDoubleUpgradeDict['costDoubleUpgrade'] = cost * 3
+	newDoubleUpgradeDict['cost'] = cost * 3
 	save.file('doubleUpgrade.pickle', 'wb', newDoubleUpgradeDict)
 	
 
@@ -40,12 +38,47 @@ def doubleUpgrade():
 	print('\nYou have ' + str(userCookies) + ' cookies left!')
 
 
+def goldenCookieUpgrade():
+	"""
+	If the golden cookie upgrade goes through,
+	this function will do the logic for it
+	"""
+	cookiesDict = save.file('cookiesData.pickle', 'rb')
+	goldenCookieDict = save.file('goldenCookie.pickle', 'rb')
+	userCookies = cookiesDict['currentUser']
+
+	#Subtracts cost from user's total cookies
+	newAmountOfCookies = userCookies - goldenCookieDict['cost']
+	newDictToSave = {'currentUser':newAmountOfCookies}
+	save.file('cookiesData.pickle', 'wb', newDictToSave)
+	print('Upgrade successful!')
+
+	#Checks current doubleUpgrade file data
+	chance = goldenCookieDict['goldenCookieChance']
+	cost = goldenCookieDict['cost']
+
+	#This should actually upgrade the data for the cookies per click
+	newGoldenCookieDict = goldenCookieDict
+	newGoldenCookieDict['goldenCookieChance'] = chance * 2
+	newGoldenCookieDict['cost'] = cost * 3
+	save.file('goldenCookie.pickle', 'wb', newGoldenCookieDict)
+
+	#Checks how many cookies the user has left
+	#Then it prints it to console
+	cookiesDict = save.file('cookiesData.pickle', 'rb')
+	userCookies = cookiesDict['currentUser']
+	print('\nYou have ' + str(userCookies) + ' cookies left!')
+
+
 def checkGoldenCookie():
+	"""
+	Checks if the user just clicked on a golden cookie
+	"""
 
 	goldenCookieDict = save.file('goldenCookie.pickle', 'rb')
-	
 	goldenCookieChance = goldenCookieDict['goldenCookieChance']
 	chance = random.randrange(0, 101)
+
 	
 	if chance <= goldenCookieChance:
 		print('\n\n\n\nWERE YOU MINING FOR GOLDEN COOKIES?')
@@ -77,3 +110,5 @@ def goldenCookieTrueOrFalse(worked, currentCookies):
 	if worked == False:
 		save.file('cookiesData.pickle', 'wb', {'currentUser': currentCookies})
 		cookie.clicker()
+
+
