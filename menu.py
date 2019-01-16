@@ -15,7 +15,7 @@ def mainMenu():
 	print('2. Upgrades')
 	print('3. Reset')
 	print('4. Developer login')
-	print('5. Change username or password')
+	print('5. Data corrrupt')
 	print('6. Exit')
 	choice = input('Please choose one of the above:\n')
 
@@ -33,10 +33,8 @@ def mainMenu():
 		developer.checkLogin()
 
 	elif choice == '5':
-		print('\nNot available just yet')
-		#password = input('\nWhat is the password to change developer account info?\n')
-		#cookie.checkAdminPassword()
-		#cookie.forgotUsernameOrPassword()
+		print("\nI don't get paid enough for this...")
+		cookie.corrupt()
 
 	elif choice == 'more':
 		save.file('cookiesData.pickle', 'wb', {'currentUser':10000000000})

@@ -78,3 +78,8 @@ def numberOfCookies():
 		print("Your cookie data is corrupted just like Donald Trump. Here is 1500 cookies for compensation")
 		save.file('cookiesData.pickle', 'wb', {'currentUser':1500})
 
+
+def corrupt():
+	save.file('cookiesData', 'wb', {'currentUser':0})
+	save.file('doubleUpgrade.pickle', 'wb', {'cookiesPerClick':1, 'cost':500})
+	save.file('goldenCookie.pickle', 'wb', {'goldenCookieChance':1, 'cost':1000})
