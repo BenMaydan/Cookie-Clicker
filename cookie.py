@@ -1,85 +1,101 @@
 import menu
 import pickle
 import save
-import upgradeLogic
 
 
-def clicker():
+class User:
 	"""
-	The place the user goes to, to click cookies
+	All the user methods for the current user
+
+	Does not communicate with a server
+	All of this is done locally
 	"""
-	doubleUpgrade = save.file('doubleUpgrade.pickle', 'rb')
-	cookiesPerClick = doubleUpgrade['cookiesPerClick']
-	#The variable currentCookies is the number of cookies the user has in the 'vault'
-	currentCookies = numberOfCookies()
-
-	letterClicked = input()
-	letterClicked = letterClicked.lower()
-	
-	if letterClicked == 'c':
-		currentCookies += cookiesPerClick
-		print('# of cookies is ' + str(currentCookies) + '\n')
-		goldenCookieTrueOrFalse = upgradeLogic.checkGoldenCookie()
-		upgradeLogic.goldenCookieTrueOrFalse(goldenCookieTrueOrFalse, currentCookies)
-
-	elif letterClicked == '1':
-		save.file('cookiesData.pickle', 'wb', {'currentUser':currentCookies})
-		menu.mainMenu()
-
-	elif letterClicked == 'k':
-		print('Cookies per click is', cookiesPerClick, '\n')
-
-	elif letterClicked == '#':
-		print(currentCookies)
-
-	else:
-		print('Unrecognized input!')
-		clicker()
+	#Ask in class if variables defined under this line
+	#For example:
+	#var = 1
+	#Are mutable or immutable
+	#Because I need to know why currentCookies does not update the second time I press c
 
 
-def resetCookies():
-	"""
-	Resets the cookies the user has to 0
-	"""
+	def __init__(self, cookiesPerClick, doubleUpgradeCost, goldenCookieChance, goldenCookieCost, currentCookies):
+		self.cookiesPerClick = cookiesPerClick
+		self.doubleUpgradeCost = doubleUpgradeCost
+		self.goldenCookieChance = goldenCookieChance
+		self.goldenCookieCost = goldenCookieCost
+		self.currentCookies = currentCookies
 
-	exit = False
-	while not exit:
 
-		choice = input('\nAre you sure you would like to reset your cookies? y/n\n')
-	
-		if choice == 'y':
-			exit = True
-			save.file('cookiesData.pickle', 'wb', {'currentUser':0})
-			print('\nSuccessfully reset cookies!')
+	def clicker(self):
+		"""
+		The place the user goes to, to click cookies
+		"""
+		import save
+		import time
 
-		elif choice == 'n':
-			exit = True
+		time.sleep(0.01)
+		letterClicked = input()
+		letterClicked = letterClicked.lower()
+		
+		if letterClicked == 'c':
+			self.inc()
+
+			
+			save.file('cookiesData.pickle', 'wb', {'currentUser': self.currentCookies})
+			print('# of cookies is ' + str(self.currentCookies) + '\n')
+			goldenCookieTrueOrFalse = save.checkGoldenCookie()
+			save.goldenCookieTrueOrFalse(goldenCookieTrueOrFalse, self.currentCookies)
+
+		elif letterClicked == '1':
+			save.file('cookiesData.pickle', 'wb', {'currentUser':self.currentCookies})
+			menu.mainMenu()
+
+		elif letterClicked == 'k':
+			print('Cookies per click is', self.cookiesPerClick, '\n')
+			self.clicker()
+
+		elif letterClicked == '#':
+			print(self.currentCookies, '\n')
+			self.clicker()
 
 		else:
-			print('Unrecognized input')
+			print('Unrecognized input!')
+			self.clicker()
 
 
-def resetUpgrades():
-	save.file('doubleUpgrade.pickle', 'wb', {'cookiesPerClick':1, 'costDoubleUpgrade':500})
-	save.file('goldenCookie.pickle', 'wb', {'goldenCookieChance':1, 'costGoldenCookie':1000})
-	print('\nUpgrades successfully reset!')
+	def inc(self):
+		print(self.currentCookies, "cc")
+		self.currentCookies += self.cookiesPerClick
+		print(self.currentCookies, "cc")
 
 
-def numberOfCookies():
-	"""
-	Determines current number of cookies the user has
-	"""
 
-	try:
-		cookieDict = save.file('cookiesData.pickle', 'rb')
-		numberOfCookies = cookieDict['currentUser']
-		return numberOfCookies
-	except:
-		print("Your cookie data is corrupted just like Donald Trump. Here is 1500 cookies for compensation")
-		save.file('cookiesData.pickle', 'wb', {'currentUser':1500})
+	def resetCookies(self):
+		"""
+		Resets the cookies the user has to 0
+		"""
+
+		exit = False
+		while not exit:
+
+			choice = input('\nAre you sure you would like to reset your cookies? y/n\n')
+		
+			if choice == 'y':
+				exit = True
+				save.file('cookiesData.pickle', 'wb', {'currentUser':0})
+				print('\nSuccessfully reset cookies!')
+
+			elif choice == 'n':
+				exit = True
+
+			else:
+				print('Unrecognized input')
 
 
-def corrupt():
-	save.file('cookiesData', 'wb', {'currentUser':0})
-	save.file('doubleUpgrade.pickle', 'wb', {'cookiesPerClick':1, 'cost':500})
-	save.file('goldenCookie.pickle', 'wb', {'goldenCookieChance':1, 'cost':1000})
+	def resetUpgrades(self):
+		save.file('doubleUpgrade.pickle', 'wb', {'cookiesPerClick':1, 'cost':500})
+		save.file('goldenCookie.pickle', 'wb', {'goldenCookieChance':1, 'cost':1000})
+		print('\nUpgrades successfully reset!')
+
+
+
+

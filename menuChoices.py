@@ -1,15 +1,19 @@
 import menu
-import upgradeLogic
+import save
 import cookie
 import save
+import time
+import screen
 
+
+#menu.getCurrent()
 
 def mainMenuReset():
 	"""
 	Logic for the reset choice in the main nenu
 	"""
-
-	print('\n\n1. Reset Cookies')
+	screen.clearScreen()
+	print('1. Reset Cookies')
 	print('2. Reset Upgrades')
 	print('3. Exit')
 	resetChoice = input('')
@@ -17,9 +21,10 @@ def mainMenuReset():
 	if resetChoice == '1':
 		save.file('cookiesData.pickle', 'wb', {'currentUser':0})
 		print('\nSuccessfully reset cookies!')
+		time.sleep(1)
 
 	elif resetChoice == '2':
-		cookie.resetUpgrades()
+		current.resetUpgrades()
 
 	elif resetChoice == '3':
 		pass
@@ -36,8 +41,7 @@ def upgradeCheckMoney(upgrade):
 
 	cookiesDict = save.file('cookiesData.pickle', 'rb')
 	upgradeDict = save.file(upgrade + '.pickle', 'rb')
-	print(upgradeDict)
-	upgradeToCommand = {'doubleUpgrade':upgradeLogic.doubleUpgrade, 'goldenCookie':upgradeLogic.goldenCookieUpgrade}
+	upgradeToCommand = {'doubleUpgrade':save.doubleUpgrade, 'goldenCookie':save.goldenCookieUpgrade}
 		
 
 	print('\nThe cost for this upgrade is ' + str(upgradeDict['cost']))
