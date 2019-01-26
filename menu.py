@@ -2,6 +2,7 @@ import cookie
 import save
 import save
 import menuChoices
+import logic
 import screen
 import time
 from developer import developer
@@ -32,16 +33,16 @@ def mainMenu():
 	choice = input('Please choose one of the above:\n')
 
 	if choice == '1':
-		screen.clearScreen()
+		logic.clearScreen()
 		print("\nTo click cookies type in 'c' and then press enter. At any time, press '1' to go back to the main menu.\n")
 		current.clicker()
 
 	elif choice == '2':
-		screen.clearScreen()
+		logic.clearScreen()
 		upgradesMenu()
 
 	elif choice == '3':
-		menuChoices.mainMenuReset()
+		logic.mainMenuReset()
 
 	elif choice == '4':
 		#developer.checkLogin()
@@ -79,13 +80,13 @@ def upgradesMenu():
 
 
 	if choiceOfUpgrade == '1':
-		menuChoices.upgradeCheckMoney('doubleUpgrade')
+		logic.upgradeCheckMoney('doubleUpgrade')
 	
 	elif choiceOfUpgrade == '2':
-		menuChoices.upgradeCheckMoney('goldenCookie')
+		logic.upgradeCheckMoney('goldenCookie')
 
 	elif choiceOfUpgrade == '3':
-		menuChoices.autoClickerUpgrade()
+		autoClickerMenu()
 
 	elif choiceOfUpgrade == '4':
 		print('\nNot available yet!')
@@ -99,6 +100,33 @@ def upgradesMenu():
 	else:
 		print('Unrecognized input!')
 		upgradesMenu()
+
+
+def autoClickerMenu():
+
+	print('\nThere are 2 choices for this upgrade')
+	print('1. Increase speed')
+	print('2. Increase cookie per autoclick')
+	print('3. Both upgrades above at once')
+	print('4. Go back to upgrade menu')
+	choice = input('Which one would you like?\n')
+
+
+	if choice == '1':
+		print('\nNot available yet!')
+
+	elif choice == '2':
+		print('\nNot available yet!')
+
+	elif choice == '3':
+		print('\nNot available yet')
+
+	elif choice == '4':
+		upgradesMenu()
+
+	else:
+		print('Unrecognized input!')
+
 
 
 def developerMenu():
