@@ -26,7 +26,7 @@ class developer(object):
 				changeToInteger = int(changeToString)
 		
 				if changeToInteger >= 0:
-					save.file('cookiesData.pickle', 'wb', {'currentUser':changeToInteger})
+					save.file('cookiesData.pickle', 'wb', {'totalCookies':changeToInteger})
 					print('\nSuccessfully changed number of cookies to ' + changeToString + '\n')
 
 				else:

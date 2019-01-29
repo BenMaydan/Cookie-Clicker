@@ -1,30 +1,20 @@
 import cookie
 import save
-import save
-import menuChoices
 import logic
-import screen
-import time
 from developer import developer
 
-cookiesPerClick = save.file('doubleUpgrade.pickle', 'rb')['cookiesPerClick']
-doubleUpgradeCost = save.file('doubleUpgrade.pickle', 'rb')['cost']
-goldenCookieChance = save.file('goldenCookie.pickle', 'rb')['goldenCookieChance']
-goldenCookieCost = save.file('goldenCookie.pickle', 'rb')['cost']
-currentCookies = save.file('cookiesData.pickle', 'rb')['currentUser']
-current = cookie.User(cookiesPerClick, doubleUpgradeCost, goldenCookieChance, goldenCookieCost, currentCookies)
 
+current = cookie.User()
 
 def getCurrent():
-	print('It is working')
-	#return current
+	return current
+
 
 def mainMenu():
 	"""
 	The menu for when the program is run. This is the menu to go to other places
 	"""
-	screen.clearScreen()
-	print('1. Clicker')
+	print('\n1. Clicker')
 	print('2. Upgrades')
 	print('3. Reset')
 	print('4. Developer login')
@@ -33,12 +23,10 @@ def mainMenu():
 	choice = input('Please choose one of the above:\n')
 
 	if choice == '1':
-		logic.clearScreen()
 		print("\nTo click cookies type in 'c' and then press enter. At any time, press '1' to go back to the main menu.\n")
 		current.clicker()
 
 	elif choice == '2':
-		logic.clearScreen()
 		upgradesMenu()
 
 	elif choice == '3':
@@ -53,16 +41,13 @@ def mainMenu():
 		#cookie.corrupt()
 
 	elif choice == 'more':
-		save.file('cookiesData.pickle', 'wb', {'currentUser':10000000000000000000})
+		current.set('totalCookies', 10000000000000000000)
 
 	elif choice == '6':
 		return True
 
 	else:
-		screen.clearScreen()
 		print('Unrecognized input!')
-		time.sleep(1)
-		screen.clearScreen()
 
 
 def upgradesMenu():
@@ -70,7 +55,7 @@ def upgradesMenu():
 	This is the menu to buy upgrades
 	"""
 
-	print('1. Doubles the cookies per manual click. Cost = ')
+	print('\n1. Doubles the cookies per manual click. Cost = ')
 	print('2. Chance of golden cookie (Gives 50 cookies if golden). Cost = ')
 	print('3. Auto clicker. It starts by clicking 0.1 cookie per second. Cost = ')
 	print('4. VIP auto clicker permanently clicks every second while the program is running. Cost = 100,000,000,000')
@@ -80,10 +65,10 @@ def upgradesMenu():
 
 
 	if choiceOfUpgrade == '1':
-		logic.upgradeCheckMoney('doubleUpgrade')
+		logic.upgradeCheckMoney('doubleUpgrade', 'doubleUpgradeCost')
 	
 	elif choiceOfUpgrade == '2':
-		logic.upgradeCheckMoney('goldenCookie')
+		logic.upgradeCheckMoney('goldenCookie', 'goldenCookieCost')
 
 	elif choiceOfUpgrade == '3':
 		autoClickerMenu()
@@ -137,7 +122,7 @@ def developerMenu():
 	exit = False
 	while not exit:
 
-		print('1. Change number of cookies for current user')
+		print('\n1. Change number of cookies for current user')
 		print('2. Change upgrades for current user')
 		print('3. Back to main menu')
 		choice = input('Please choose one of the above:\n')

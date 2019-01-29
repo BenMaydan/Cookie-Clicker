@@ -1,6 +1,6 @@
 import pickle
 import menu
-
+import random
 
 #print(menu.getCurrent())
 
@@ -26,33 +26,21 @@ def doubleUpgrade():
 	"""
 
 	#Grabbing variable values
-	cookiesDict = save.file('cookiesData.pickle', 'rb')
-	doubleUpgradeDict = save.file('doubleUpgrade.pickle', 'rb')
-	totalCookies = menu.current.currentCookies
+	totalCookies = menu.current.get('totalCookies')
+	cookiesPerClick = menu.current.get('cookiesPerClick')
+	doubleUpgradeCost = menu.current.get('doubleUpgradeCost')
 
-
-	#The block of code below subtracts the cost of the upgrade from the user's total cookies
-	newAmountOfCookies = totalCookies - doubleUpgradeDict['cost']
-	newDictToSave = {'currentUser':newAmountOfCookies}
-	save.file('cookiesData.pickle', 'wb', newDictToSave)
+	#Writes new data to the file
+	newAmountOfCookies = totalCookies - doubleUpgradeCost
+	menu.current.set('totalCookies', newAmountOfCookies)
+	menu.current.set('cookiesPerClick', cookiesPerClick * 2)
+	menu.current.set('doubleUpgradeCost', doubleUpgradeCost * 3)
 	print('\nUpgrade successful!')
-
-
-	#Checks current doubleUpgrade file data
-	cookiesPerClick = doubleUpgradeDict['cookiesPerClick']
-	cost = doubleUpgradeDict['cost']
-
-
-	#This should actually upgrade the data for the cookies per click
-	newDoubleUpgradeDict = doubleUpgradeDict
-	newDoubleUpgradeDict['cookiesPerClick'] = cookiesPerClick * 2
-	newDoubleUpgradeDict['cost'] = cost * 3
-	save.file('doubleUpgrade.pickle', 'wb', newDoubleUpgradeDict)
 	
 
 	#Checks how many cookies the user has left
-	cookiesDict = save.file('cookiesData.pickle', 'rb')
-	totalCookies = cookiesDict['currentUser']
+	#And prints to the user for clarity
+	totalCookies = menu.current.get('totalCookies')
 	print('You have ' + str(totalCookies) + ' cookies left!')
 
 
@@ -61,13 +49,11 @@ def goldenCookieUpgrade():
 	If the golden cookie upgrade goes through,
 	this function will do the logic for it
 	"""
-	cookiesDict = save.file('cookiesData.pickle', 'rb')
-	goldenCookieDict = save.file('goldenCookie.pickle', 'rb')
-	userCookies = cookiesDict['currentUser']
+	totalCookies = menu.current.get('totalCookies')
 
 	#Subtracts cost from user's total cookies
 	newAmountOfCookies = userCookies - goldenCookieDict['cost']
-	newDictToSave = {'currentUser':newAmountOfCookies}
+	newDictToSave = {'totalCookies':newAmountOfCookies}
 	save.file('cookiesData.pickle', 'wb', newDictToSave)
 	print('Upgrade successful!')
 
@@ -84,7 +70,7 @@ def goldenCookieUpgrade():
 	#Checks how many cookies the user has left
 	#Then it prints it to console
 	cookiesDict = save.file('cookiesData.pickle', 'rb')
-	userCookies = cookiesDict['currentUser']
+	userCookies = cookiesDict['totalCookies']
 	print('\nYou have ' + str(userCookies) + ' cookies left!')
 
 
@@ -93,7 +79,7 @@ def checkGoldenCookie():
 	Checks if the user just clicked on a golden cookie
 	"""
 
-	goldenCookieChance = save.file('goldenCookie.pickle', 'rb')['goldenCookieChance']
+	goldenCookieChance = menu.current.get('goldenCookieChance')
 	chance = random.randrange(0, 101)
 
 	
@@ -105,22 +91,22 @@ def checkGoldenCookie():
 		return False
 
 
-def goldenCookieTrueOrFalse(worked, currentCookies):
+def goldenCookieTrueOrFalse(worked, totalCookies):
 	"""
 	Checks if the user received a golden cookie
 	And performs relevant logic for the check
 	"""
 	#Adds 50 cookies (golden cookie) to user's current cookies
-	newCookiesToSave = currentCookies + 50
+	newCookiesToSave = totalCookies + 50
 
 	#If the chance of getting a golden cookie worked:
 	#Then the user will get a golden cookie
 	#And the cookie he clicked will not be saved
 	if worked == True:
-		save.file('cookiesData.pickle', 'wb', {'currentUser': newCookiesToSave})
-		current.clicker()
+		menu.current.set('totalCookies', newCookiesToSave)
+		menu.current.clicker()
 
 	#If the chance of getting a golden cookie failed:
 	#Then this will just save the current cookies
 	if worked == False:
-		current.clicker()
+		menu.current.clicker()

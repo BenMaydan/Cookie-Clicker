@@ -7,23 +7,9 @@ class User:
 	"""
 	All the user methods for the current user
 
-	Does not communicate with a server
+	Does not communicate with a server (at the moment)
 	All of this is done locally
 	"""
-	#Ask in class if variables defined under this line
-	#For example:
-	#var = 1
-	#Are mutable or immutable
-	#Because I need to know why currentCookies does not update the second time I press c
-
-
-	def __init__(self, cookiesPerClick, doubleUpgradeCost, goldenCookieChance, goldenCookieCost, currentCookies):
-		self.cookiesPerClick = cookiesPerClick
-		self.doubleUpgradeCost = doubleUpgradeCost
-		self.goldenCookieChance = goldenCookieChance
-		self.goldenCookieCost = goldenCookieCost
-		self.currentCookies = currentCookies
-
 
 	def clicker(self):
 		"""
@@ -32,29 +18,29 @@ class User:
 		import save
 		import time
 
-		time.sleep(0.01)
 		letterClicked = input()
 		letterClicked = letterClicked.lower()
 		
 		if letterClicked == 'c':
-			self.inc()
-
-			
-			save.file('cookiesData.pickle', 'wb', {'currentUser': self.currentCookies})
-			print('# of cookies is ' + str(self.currentCookies) + '\n')
+			totalCookies = self.get('totalCookies')
+			cookiesPerClick = self.get('cookiesPerClick')
+			totalCookies += cookiesPerClick
+			self.set('totalCookies', totalCookies)
+			print('# of cookies is ' + str(self.get('totalCookies')) + '\n')
 			goldenCookieTrueOrFalse = save.checkGoldenCookie()
-			save.goldenCookieTrueOrFalse(goldenCookieTrueOrFalse, self.currentCookies)
+			save.goldenCookieTrueOrFalse(goldenCookieTrueOrFalse, totalCookies)
 
 		elif letterClicked == '1':
-			save.file('cookiesData.pickle', 'wb', {'currentUser':self.currentCookies})
+			totalCookies = self.get('totalCookies')
+			self.set('totalCookies', totalCookies)
 			menu.mainMenu()
 
 		elif letterClicked == 'k':
-			print('Cookies per click is', self.cookiesPerClick, '\n')
+			print('Cookies per click is', str(self.get('cookiesPerClick')), '\n')
 			self.clicker()
 
 		elif letterClicked == '#':
-			print(self.currentCookies, '\n')
+			print(str(self.get('totalCookies')), '\n')
 			self.clicker()
 
 		else:
@@ -62,11 +48,21 @@ class User:
 			self.clicker()
 
 
-	def inc(self):
-		print(self.currentCookies, "cc")
-		self.currentCookies += self.cookiesPerClick
-		print(self.currentCookies, "cc")
+	def get(self, thingToGet):
+		"""
+		Gets the most current value of the 'instance attribute' in this user class
+		"""
+		currentData = save.file('userData.pickle', 'rb')
+		return currentData[thingToGet]
 
+
+	def set(self, thingToSet, setTo):
+		"""
+		Updates the current data to reflect changes made in a different file or function/method
+		"""
+		currentData = save.file('userData.pickle', 'rb')
+		currentData[thingToSet] = setTo
+		save.file('userData.pickle', 'wb', currentData)
 
 
 	def resetCookies(self):
@@ -81,7 +77,7 @@ class User:
 		
 			if choice == 'y':
 				exit = True
-				save.file('cookiesData.pickle', 'wb', {'currentUser':0})
+				self.set('totalCookies', 0)
 				print('\nSuccessfully reset cookies!')
 
 			elif choice == 'n':
@@ -92,9 +88,30 @@ class User:
 
 
 	def resetUpgrades(self):
-		save.file('doubleUpgrade.pickle', 'wb', {'cookiesPerClick':1, 'cost':500})
-		save.file('goldenCookie.pickle', 'wb', {'goldenCookieChance':1, 'cost':1000})
+		self.set('cookiesPerClick', 1)
+		self.set('doubleUpgradeCost', 500)
+		self.set('goldenCookieChance', 1)
+		self.set('goldenCookieCost', 1000)
 		print('\nUpgrades successfully reset!')
+
+
+
+
+
+#boot
+	#load save data
+	#use ^ for v
+	#use init method to keep up to date
+
+
+
+#main loop#
+	#options
+	#does whatever
+
+
+	#check: saved cookie total vs current cookie total
+		#if its a big enough difference (up to you) then save
 
 
 
