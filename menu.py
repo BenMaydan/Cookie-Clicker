@@ -1,53 +1,15 @@
 import cookie
 import save
 import logic
+import sys
 from developer import developer
 
 
 current = cookie.User()
 
-def getCurrent():
-	return current
 
-
-def mainMenu():
-	"""
-	The menu for when the program is run. This is the menu to go to other places
-	"""
-	print('\n1. Clicker')
-	print('2. Upgrades')
-	print('3. Reset')
-	print('4. Developer login')
-	print('5. Data corrrupt')
-	print('6. Exit')
-	choice = input('Please choose one of the above:\n')
-
-	if choice == '1':
-		print("\nTo click cookies type in 'c' and then press enter. At any time, press '1' to go back to the main menu.\n")
-		current.clicker()
-
-	elif choice == '2':
-		upgradesMenu()
-
-	elif choice == '3':
-		logic.mainMenuReset()
-
-	elif choice == '4':
-		#developer.checkLogin()
-		print('')
-
-	elif choice == '5':
-		print("\nI don't get paid enough for this...")
-		#cookie.corrupt()
-
-	elif choice == 'more':
-		current.set('totalCookies', 10000000000000000000)
-
-	elif choice == '6':
-		return True
-
-	else:
-		print('Unrecognized input!')
+def notAvailable():
+	print('This feature is not available')
 
 
 def upgradesMenu():
@@ -55,12 +17,18 @@ def upgradesMenu():
 	This is the menu to buy upgrades
 	"""
 
-	print('\n1. Doubles the cookies per manual click. Cost = ')
-	print('2. Chance of golden cookie (Gives 50 cookies if golden). Cost = ')
+	print('\n1. Doubles the cookies per manual click. Cost =', current.get('doubleUpgradeCost'))
+	print('-----')
+	print('2. Chance of golden cookie (Gives 50 cookies if golden). Cost =', current.get('goldenCookieCost'))
+	print('-----')
 	print('3. Auto clicker. It starts by clicking 0.1 cookie per second. Cost = ')
+	print('-----')
 	print('4. VIP auto clicker permanently clicks every second while the program is running. Cost = 100,000,000,000')
+	print('-----')
 	print('5. VIP golden cookie upgrade makes every cookie golden. Cost = 1,000,000,000,000')
+	print('-----')
 	print('6. Return to main menu')
+	print('-----')
 	choiceOfUpgrade = input('Please choose one of the above:\n')
 
 
@@ -71,7 +39,7 @@ def upgradesMenu():
 		logic.upgradeCheckMoney('goldenCookie', 'goldenCookieCost')
 
 	elif choiceOfUpgrade == '3':
-		autoClickerMenu()
+		autoClickerMenu.display()
 
 	elif choiceOfUpgrade == '4':
 		print('\nNot available yet!')
@@ -87,57 +55,71 @@ def upgradesMenu():
 		upgradesMenu()
 
 
-def autoClickerMenu():
-
-	print('\nThere are 2 choices for this upgrade')
-	print('1. Increase speed')
-	print('2. Increase cookie per autoclick')
-	print('3. Both upgrades above at once')
-	print('4. Go back to upgrade menu')
-	choice = input('Which one would you like?\n')
-
-
-	if choice == '1':
-		print('\nNot available yet!')
-
-	elif choice == '2':
-		print('\nNot available yet!')
-
-	elif choice == '3':
-		print('\nNot available yet')
-
-	elif choice == '4':
-		upgradesMenu()
-
-	else:
-		print('Unrecognized input!')
-
-
-
-def developerMenu():
+class Menu:
+	""" 
+	Creates lots of sub-menus
 	"""
-	The menu for all things related to developers
-	"""
+	def __init__(self, optionMap, name, exitTitle):
+		self.name = name
+		self.optionMap = optionMap
+		self.exitTitle = exitTitle
+		self.options = list(optionMap.keys())
 
-	exit = False
-	while not exit:
+	def display(self, switch = True):
+		""" 
+		Starts a loop which will display the menu given with a dictionary
+		"""
+		selectionValuePairs = {}
+		current = 1
+		loop = switch
 
-		print('\n1. Change number of cookies for current user')
-		print('2. Change upgrades for current user')
-		print('3. Back to main menu')
-		choice = input('Please choose one of the above:\n')
+		while loop:
+			print('\nOptions:')
+			current = 1
+			selectionValuePairs = {}
 
-		if choice == '1':
-			developer.manuallyChangeCookies()
+			#Creates a selection and value pair map
+			#Each number (user input) is mapped to the string
+			for i in self.options:
+				selectionValuePairs[current] = i
+				current += 1
+			selectionValuePairs[current] = self.exitTitle
 
-		elif choice == '2':
-			print('\nCurrently being worked on!\n')
+			#For each string it prints it and adds the number for selection
+			for key in selectionValuePairs:
+				print(str(key) + ". " + str(selectionValuePairs[key]))
+			selection = input()
 
-		elif choice == '3':
-			exit = True
-			mainMenu()
 
-		else:
-			print('Unrecognized input!')
+			try:
+				selection = int(selection)
 
+				#If the user selects exit is stops the program
+				if selectionValuePairs[selection] == self.exitTitle:
+					break
+
+				#Does a function call based off of the user input
+				else:
+					itemSelected = selectionValuePairs[selection]
+					functionToCall = self.optionMap[itemSelected][0]
+					parameters = (self.optionMap[itemSelected][1:])
+					
+					#In the function call, using the * allows it to have multiple parameters
+					functionToCall(*parameters)
+			#Validates user input
+			except (KeyError, ValueError):
+				print('Please make a proper selection.\n')
+
+
+#Dictionaries of option for menu objects
+autoClickerOptions = {'Increase speed':[notAvailable], 'Increase cookie per autoclick':[notAvailable], 'Both upgrades above at once':[notAvailable], 'Go back to upgrade menu':[upgradesMenu]}
+mainMenuOptions = {'Clicker':[current.clicker], 'Upgrades':[upgradesMenu], 'Reset':[logic.mainMenuReset], 'Developer login':[notAvailable], 'Data corrupt':[notAvailable]}
+
+#Creates the menu objects
+mainMenu = Menu(mainMenuOptions, 'Main Menu', 'Exit')
+autoClickerMenu = Menu(autoClickerOptions, 'Auto Clicker Menu', 'Exit')
+
+developerMenuOptions = {'Change number of cookies for current user':[developer.manuallyChangeCookies], 'Change upgrades for current user':[notAvailable], 'Back to main menu':[mainMenu.display]}
+developerMenu = Menu(developerMenuOptions, 'Developer Menu', 'Exit')
+mainMenu.display()
 
