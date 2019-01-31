@@ -12,7 +12,6 @@ def upgradeCheckMoney(upgrade, upgradeCost):
 	"""
 
 	userDict = save.file('userData.pickle', 'rb')
-	print(userDict)
 	upgradeToFunctionCall = {'doubleUpgrade':save.doubleUpgrade, 'goldenCookie':save.goldenCookieUpgrade}
 		
 
@@ -20,12 +19,12 @@ def upgradeCheckMoney(upgrade, upgradeCost):
 	upgradeChoice = input('Would you like to go ahead with buying this upgrade? yes/no\n')
 
 	if upgradeChoice == 'yes':
-		userCookies = userDict['totalCookies']
+		totalCookies = menu.current.get('totalCookies')
 
 		#Checks if user has enough cookies to purchase the upgrade
 		#Subtracts the cost of the upgrade from it
 		#Only if their cookies is higher than or equal to the cost of the upgrade
-		if userDict['totalCookies'] >= userDict[upgradeCost]:
+		if totalCookies >= menu.current.get(upgradeCost):
 			#Should read and write everything to the file
 			#But only if the user has enough money(cookies) and they want to buy the upgrade
 			upgradeToFunctionCall[upgrade]()

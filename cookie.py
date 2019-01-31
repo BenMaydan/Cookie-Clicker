@@ -28,12 +28,12 @@ class User:
 			self.set('totalCookies', totalCookies)
 			print('# of cookies is ' + str(self.get('totalCookies')) + '\n')
 			goldenCookieTrueOrFalse = save.checkGoldenCookie()
-			save.goldenCookieTrueOrFalse(goldenCookieTrueOrFalse, totalCookies)
+			save.goldenCookieTrueOrFalse(goldenCookieTrueOrFalse)
 
 		elif letterClicked == '1':
 			totalCookies = self.get('totalCookies')
 			self.set('totalCookies', totalCookies)
-			menu.mainMenu()
+			menu.mainMenu.display()
 
 		elif letterClicked == 'k':
 			print('Cookies per click is', str(self.get('cookiesPerClick')), '\n')

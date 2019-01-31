@@ -24,6 +24,8 @@ def doubleUpgrade():
 	"""
 	Performs all of the logic if the double upgrade is successful
 	"""
+	######MAKE THIS BETTER
+	######BE ABLE TO USE FOR EVERY UPGRADE
 
 	#Grabbing variable values
 	totalCookies = menu.current.get('totalCookies')
@@ -50,28 +52,22 @@ def goldenCookieUpgrade():
 	this function will do the logic for it
 	"""
 	totalCookies = menu.current.get('totalCookies')
+	goldenCookieCost = menu.current.get('goldenCookieCost')
+	goldenCookieChance = menu.current.get('goldenCookieChance')
 
-	#Subtracts cost from user's total cookies
-	newAmountOfCookies = userCookies - goldenCookieDict['cost']
-	newDictToSave = {'totalCookies':newAmountOfCookies}
-	save.file('cookiesData.pickle', 'wb', newDictToSave)
+
+	#Writes new data to the file
+	newAmountOfCookies = totalCookies - goldenCookieCost
+	menu.current.set('totalCookies', newAmountOfCookies)
+	menu.current.set('goldenCookieChance', chance * 2)
+	menu.current.set('goldenCookieCost', cost * 3)
 	print('Upgrade successful!')
 
-	#Checks current doubleUpgrade file data
-	chance = goldenCookieDict['goldenCookieChance']
-	cost = goldenCookieDict['cost']
-
-	#This should actually upgrade the data for the cookies per click
-	newGoldenCookieDict = goldenCookieDict
-	newGoldenCookieDict['goldenCookieChance'] = chance * 2
-	newGoldenCookieDict['cost'] = cost * 3
-	save.file('goldenCookie.pickle', 'wb', newGoldenCookieDict)
 
 	#Checks how many cookies the user has left
 	#Then it prints it to console
-	cookiesDict = save.file('cookiesData.pickle', 'rb')
-	userCookies = cookiesDict['totalCookies']
-	print('\nYou have ' + str(userCookies) + ' cookies left!')
+	totalCookies = menu.current.get('totalCookies')
+	print('\nYou have ' + str(totalCookies) + ' cookies left!')
 
 
 def checkGoldenCookie():
@@ -91,12 +87,13 @@ def checkGoldenCookie():
 		return False
 
 
-def goldenCookieTrueOrFalse(worked, totalCookies):
+def goldenCookieTrueOrFalse(worked):
 	"""
 	Checks if the user received a golden cookie
 	And performs relevant logic for the check
 	"""
 	#Adds 50 cookies (golden cookie) to user's current cookies
+	totalCookies = menu.current.get('totalCookies')
 	newCookiesToSave = totalCookies + 50
 
 	#If the chance of getting a golden cookie worked:

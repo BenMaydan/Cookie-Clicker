@@ -12,6 +12,11 @@ def notAvailable():
 	print('This feature is not available')
 
 
+def clickerPrint():
+	print('\nTo click cookies, press c and to exit to menu press 1.\n')
+	current.clicker()
+
+
 def upgradesMenu():
 	"""
 	This is the menu to buy upgrades
@@ -48,7 +53,7 @@ def upgradesMenu():
 		print('\nNot available yet!')
 
 	elif choiceOfUpgrade == '6':
-		mainMenu()
+		mainMenu.display()
 
 	else:
 		print('Unrecognized input!')
@@ -88,10 +93,10 @@ class Menu:
 			#For each string it prints it and adds the number for selection
 			for key in selectionValuePairs:
 				print(str(key) + ". " + str(selectionValuePairs[key]))
-			selection = input()
 
 
 			try:
+				selection = input()
 				selection = int(selection)
 
 				#If the user selects exit is stops the program
@@ -103,7 +108,7 @@ class Menu:
 					itemSelected = selectionValuePairs[selection]
 					functionToCall = self.optionMap[itemSelected][0]
 					parameters = (self.optionMap[itemSelected][1:])
-					
+
 					#In the function call, using the * allows it to have multiple parameters
 					functionToCall(*parameters)
 			#Validates user input
@@ -113,7 +118,7 @@ class Menu:
 
 #Dictionaries of option for menu objects
 autoClickerOptions = {'Increase speed':[notAvailable], 'Increase cookie per autoclick':[notAvailable], 'Both upgrades above at once':[notAvailable], 'Go back to upgrade menu':[upgradesMenu]}
-mainMenuOptions = {'Clicker':[current.clicker], 'Upgrades':[upgradesMenu], 'Reset':[logic.mainMenuReset], 'Developer login':[notAvailable], 'Data corrupt':[notAvailable]}
+mainMenuOptions = {'Clicker':[clickerPrint], 'Upgrades':[upgradesMenu], 'Reset':[logic.mainMenuReset], 'Developer login':[notAvailable], 'Data corrupt':[notAvailable]}
 
 #Creates the menu objects
 mainMenu = Menu(mainMenuOptions, 'Main Menu', 'Exit')
