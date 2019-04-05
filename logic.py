@@ -2,7 +2,6 @@ import menu
 import cookie
 import save
 import time
-from pynput.keyboard import Key, Controller
 
 
 #Upgrade Logic
@@ -13,7 +12,7 @@ def upgradeCheckMoney(upgrade, upgradeCost):
 
 	userDict = save.file('userData.pickle', 'rb')
 	upgradeToFunctionCall = {'doubleUpgrade':save.doubleUpgrade, 'goldenCookie':save.goldenCookieUpgrade}
-		
+
 
 	print('\nThe cost for this upgrade is ' + str(userDict[upgradeCost]))
 	upgradeChoice = input('Would you like to go ahead with buying this upgrade? yes/no\n')
@@ -36,7 +35,7 @@ def upgradeCheckMoney(upgrade, upgradeCost):
 
 	elif upgradeChoice == 'no':
 		menu.upgradesMenu()
-	
+
 	else:
 		print('Unrecognized input!')
 
@@ -52,7 +51,7 @@ def mainMenuReset():
 	print('2. Reset Upgrades')
 	print('3. Exit')
 	resetChoice = input('')
-	
+
 	if resetChoice == '1':
 		menu.current.set('totalCookies', 0)
 		print('\nSuccessfully reset cookies!')

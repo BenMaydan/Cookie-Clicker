@@ -34,12 +34,12 @@ def upgradesMenu():
 	print('-----')
 	print('6. Return to main menu')
 	print('-----')
-	choiceOfUpgrade = input('Please choose one of the above:\n')
+	choiceOfUpgrade = input('Please choose one of the above: ')
 
 
 	if choiceOfUpgrade == '1':
 		logic.upgradeCheckMoney('doubleUpgrade', 'doubleUpgradeCost')
-	
+
 	elif choiceOfUpgrade == '2':
 		logic.upgradeCheckMoney('goldenCookie', 'goldenCookieCost')
 
@@ -61,7 +61,7 @@ def upgradesMenu():
 
 
 class Menu:
-	""" 
+	"""
 	Creates lots of sub-menus
 	"""
 	def __init__(self, optionMap, name, exitTitle):
@@ -71,7 +71,7 @@ class Menu:
 		self.options = list(optionMap.keys())
 
 	def display(self, switch = True):
-		""" 
+		"""
 		Starts a loop which will display the menu given with a dictionary
 		"""
 		selectionValuePairs = {}
@@ -99,9 +99,10 @@ class Menu:
 				selection = input()
 				selection = int(selection)
 
-				#If the user selects exit is stops the program
+				#If the user selects exit it stops the program
 				if selectionValuePairs[selection] == self.exitTitle:
-					break
+					print('\nStopping running processes ->')
+					sys.exit()
 
 				#Does a function call based off of the user input
 				else:
@@ -126,5 +127,4 @@ autoClickerMenu = Menu(autoClickerOptions, 'Auto Clicker Menu', 'Exit')
 
 developerMenuOptions = {'Change number of cookies for current user':[developer.manuallyChangeCookies], 'Change upgrades for current user':[notAvailable], 'Back to main menu':[mainMenu.display]}
 developerMenu = Menu(developerMenuOptions, 'Developer Menu', 'Exit')
-mainMenu.display()
-
+#mainMenu.display()
